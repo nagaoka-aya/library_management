@@ -131,12 +131,14 @@ POST /books
 |---|---|---|---|
 | title | String | 必須 | 空文字不可 |
 | price | Int | 必須 | 0以上 |
+| published | Boolean | 必須 | `true`（出版済み）または `false`（未出版） |
 | authorIds | List\<Long\> | 必須 | 1件以上。存在する著者IDであること |
 
 ```json
 {
   "title": "書籍タイトル",
   "price": 1500,
+  "published": false,
   "authorIds": [1, 2]
 }
 ```
@@ -157,7 +159,7 @@ POST /books
 
 | ステータスコード | 発生条件 |
 |---|---|
-| 400 Bad Request | リクエストボディのバリデーションエラー（price が負、authorIds が空など） |
+| 400 Bad Request | リクエストボディのバリデーションエラー（price が負、authorIds が空、published が null など） |
 | 404 Not Found | authorIds に存在しない著者IDが含まれる |
 
 ---
