@@ -6,6 +6,8 @@ package com.example.library_management.infrastructure.jooq.generated.tables.reco
 
 import com.example.library_management.infrastructure.jooq.generated.tables.Book;
 
+import java.math.BigDecimal;
+
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
 
@@ -49,15 +51,15 @@ public class BookRecord extends UpdatableRecordImpl<BookRecord> {
     /**
      * Setter for <code>PUBLIC.BOOK.PRICE</code>.
      */
-    public void setPrice(Integer value) {
+    public void setPrice(BigDecimal value) {
         set(2, value);
     }
 
     /**
      * Getter for <code>PUBLIC.BOOK.PRICE</code>.
      */
-    public Integer getPrice() {
-        return (Integer) get(2);
+    public BigDecimal getPrice() {
+        return (BigDecimal) get(2);
     }
 
     /**
@@ -97,7 +99,7 @@ public class BookRecord extends UpdatableRecordImpl<BookRecord> {
     /**
      * Create a detached, initialised BookRecord
      */
-    public BookRecord(Long id, String title, Integer price, Boolean isPublished) {
+    public BookRecord(Long id, String title, BigDecimal price, Boolean isPublished) {
         super(Book.BOOK);
 
         setId(id);

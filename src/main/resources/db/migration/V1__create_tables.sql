@@ -10,7 +10,7 @@ CREATE TABLE book
 (
     id           BIGINT       NOT NULL AUTO_INCREMENT,
     title        VARCHAR(255) NOT NULL,
-    price        INTEGER      NOT NULL CHECK (price >= 0),
+    price        DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
     is_published BOOLEAN      NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id)
 );

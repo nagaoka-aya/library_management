@@ -10,6 +10,7 @@ import com.example.library_management.infrastructure.jooq.generated.tables.Autho
 import com.example.library_management.infrastructure.jooq.generated.tables.BookAuthor.BookAuthorPath;
 import com.example.library_management.infrastructure.jooq.generated.tables.records.BookRecord;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -73,7 +74,7 @@ public class Book extends TableImpl<BookRecord> {
     /**
      * The column <code>PUBLIC.BOOK.PRICE</code>.
      */
-    public final TableField<BookRecord, Integer> PRICE = createField(DSL.name("PRICE"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<BookRecord, BigDecimal> PRICE = createField(DSL.name("PRICE"), SQLDataType.DECIMAL(10, 2).nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.BOOK.IS_PUBLISHED</code>.
@@ -181,7 +182,7 @@ public class Book extends TableImpl<BookRecord> {
     @Override
     public List<Check<BookRecord>> getChecks() {
         return Arrays.asList(
-            Internal.createCheck(this, DSL.name("CONSTRAINT_1"), "\"PRICE\" >= 0", true)
+            Internal.createCheck(this, DSL.name("CONSTRAINT_1"), "\"PRICE\" >= CAST(0 AS NUMERIC(1))", true)
         );
     }
 
