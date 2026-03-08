@@ -28,7 +28,7 @@
 |---|---|---|---|---|---|
 | id | BIGINT | NOT NULL | ✓ | AUTO INCREMENT | 書籍ID |
 | title | VARCHAR(255) | NOT NULL | | | タイトル |
-| price | DECIMAL(10, 2) | NOT NULL | | 0以上であること | 価格 |
+| price | DECIMAL(10, 2) | | | 0以上であること | 価格 |
 | published | BOOLEAN | NOT NULL | | デフォルト: FALSE | 出版済みフラグ（TRUE: 出版済み、FALSE: 未出版） |
 
 > 備考: `published` が `TRUE` の書籍を `FALSE` に戻すことはアプリケーション層で禁止する。
