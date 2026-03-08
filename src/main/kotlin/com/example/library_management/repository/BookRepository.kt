@@ -14,7 +14,7 @@ class BookRepository(private val dsl: DSLContext) {
     fun insert(book: Book): Book {
         val record = dsl.insertInto(BOOK)
             .set(BOOK.TITLE, book.title)
-            .set(BOOK.PRICE, BigDecimal.valueOf(book.price.toLong()))
+            .set(BOOK.PRICE, book.price?.let { BigDecimal.valueOf(it.toLong()) })
             .set(BOOK.PUBLISHED, book.publicationStatus == PublicationStatus.PUBLISHED)
             .returning(BOOK.ID)
             .fetchOne()!!
@@ -33,7 +33,7 @@ class BookRepository(private val dsl: DSLContext) {
     fun update(book: Book): Book {
         dsl.update(BOOK)
             .set(BOOK.TITLE, book.title)
-            .set(BOOK.PRICE, BigDecimal.valueOf(book.price.toLong()))
+            .set(BOOK.PRICE, book.price?.let { BigDecimal.valueOf(it.toLong()) })
             .set(BOOK.PUBLISHED, book.publicationStatus == PublicationStatus.PUBLISHED)
             .where(BOOK.ID.eq(book.id))
             .execute()
@@ -66,7 +66,7 @@ class BookRepository(private val dsl: DSLContext) {
         return Book(
             id = bookRecord.get(BOOK.ID),
             title = bookRecord.get(BOOK.TITLE),
-            price = bookRecord.get(BOOK.PRICE).toInt(),
+            price = bookRecord.get(BOOK.PRICE)?.toInt(),
             publicationStatus = if (bookRecord.get(BOOK.PUBLISHED)) PublicationStatus.PUBLISHED else PublicationStatus.UNPUBLISHED,
             authorIds = authorIds,
         )

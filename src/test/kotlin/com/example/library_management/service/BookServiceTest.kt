@@ -88,6 +88,25 @@ class BookServiceTest {
         assertTrue(saved.authorIds.containsAll(listOf(authorId1, authorId2)))
     }
 
+    // 登録機能：正常系（price が null で登録）
+    @Test
+    fun `create - price が null で書籍が登録されること`() {
+        val authorId = createAuthor()
+        val request = BookRequest(title = "価格未設定の書籍", price = null, published = false, authorIds = listOf(authorId))
+
+        val response = bookService.create(request)
+
+        // レスポンス検証
+        assertNotNull(response.id)
+        assertEquals("価格未設定の書籍", response.title)
+        assertNull(response.price)
+
+        // DB検証
+        val saved = bookRepository.findById(response.id)
+        assertNotNull(saved)
+        assertNull(saved!!.price)
+    }
+
     // 著者IDに紐づく書籍一覧取得：正常系（著者IDに紐づく書籍が複数件返ること）
     @Test
     fun `findByAuthorId - 著者IDに紐づく書籍が複数件返ること`() {

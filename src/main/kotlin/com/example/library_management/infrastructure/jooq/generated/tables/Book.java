@@ -74,7 +74,7 @@ public class Book extends TableImpl<BookRecord> {
     /**
      * The column <code>PUBLIC.BOOK.PRICE</code>.
      */
-    public final TableField<BookRecord, BigDecimal> PRICE = createField(DSL.name("PRICE"), SQLDataType.DECIMAL(10, 2).nullable(false), this, "");
+    public final TableField<BookRecord, BigDecimal> PRICE = createField(DSL.name("PRICE"), SQLDataType.DECIMAL(10, 2), this, "");
 
     /**
      * The column <code>PUBLIC.BOOK.PUBLISHED</code>.

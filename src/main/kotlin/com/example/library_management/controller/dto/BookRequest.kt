@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size
 data class BookRequest(
     @field:NotBlank
     val title: String?,
-    @field:NotNull
     @field:Min(0)
     val price: Int?,
     @field:NotNull

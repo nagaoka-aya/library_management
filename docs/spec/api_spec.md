@@ -130,7 +130,7 @@ POST /books
 | フィールド名 | 型 | 必須/任意 | バリデーション条件 |
 |---|---|---|---|
 | title | String | 必須 | 空文字不可 |
-| price | Int | 必須 | 0以上 |
+| price | Int | 任意 | 値が指定された場合は0以上 |
 | published | Boolean | 必須 | `true`（出版済み）または `false`（未出版） |
 | authorIds | List\<Long\> | 必須 | 1件以上。存在する著者IDであること |
 
@@ -159,7 +159,7 @@ POST /books
 
 | ステータスコード | 発生条件 |
 |---|---|
-| 400 Bad Request | リクエストボディのバリデーションエラー（price が負、authorIds が空、published が null など） |
+| 400 Bad Request | リクエストボディのバリデーションエラー（price が指定された場合に負、authorIds が空、published が null など） |
 | 404 Not Found | authorIds に存在しない著者IDが含まれる |
 
 ---
@@ -187,7 +187,7 @@ PUT /books/{bookId}
 | フィールド名 | 型 | 必須/任意 | バリデーション条件 |
 |---|---|---|---|
 | title | String | 必須 | 空文字不可 |
-| price | Int | 必須 | 0以上 |
+| price | Int | 任意 | 値が指定された場合は0以上 |
 | authorIds | List\<Long\> | 必須 | 1件以上。存在する著者IDであること |
 | published | Boolean | 必須 | `true`（出版済み）または `false`（未出版）。`true` から `false` への変更は不可 |
 
@@ -209,7 +209,7 @@ PUT /books/{bookId}
 
 | ステータスコード | 発生条件 |
 |---|---|
-| 400 Bad Request | リクエストボディのバリデーションエラー（price が負、authorIds が空、isPublished: true → false への変更など） |
+| 400 Bad Request | リクエストボディのバリデーションエラー（price が指定された場合に負、authorIds が空、isPublished: true → false への変更など） |
 | 404 Not Found | 指定された bookId の書籍が存在しない、または authorIds に存在しない著者IDが含まれる |
 
 ---
@@ -244,7 +244,7 @@ GET /authors/{authorId}/books
 |---|---|---|
 | id | Long | 書籍ID |
 | title | String | タイトル |
-| price | Int | 価格 |
+| price | Int \| null | 価格（未設定の場合は null） |
 | published | Boolean | 出版済みフラグ（`true`: 出版済み、`false`: 未出版） |
 | authors | List\<Author\> | 著者一覧 |
 

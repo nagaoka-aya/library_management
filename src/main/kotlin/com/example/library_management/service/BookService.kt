@@ -19,7 +19,7 @@ class BookService(
         val book = Book(
             id = null,
             title = request.title!!,
-            price = request.price!!,
+            price = request.price,
             publicationStatus = if (request.published == true) PublicationStatus.PUBLISHED else PublicationStatus.UNPUBLISHED,
             authorIds = request.authorIds!!,
         )
@@ -41,7 +41,7 @@ class BookService(
         val book = Book(
             id = id,
             title = request.title!!,
-            price = request.price!!,
+            price = request.price,
             publicationStatus = newStatus,
             authorIds = request.authorIds!!,
         )

@@ -66,15 +66,20 @@ class BookControllerTest {
             .andExpect(status().isBadRequest)
     }
 
-    // 登録機能：異常系（price が null → 400）
+    // 登録機能：正常系（price が null の場合でも 201 が返ること）
     @Test
-    fun `POST books - price が null の場合に 400 が返ること`() {
+    fun `POST books - price が null の場合に 201 が返ること`() {
+        val noPriceResponse = bookResponse.copy(price = null)
+        every { authorService.findById(1L) } returns authorResponse
+        every { bookService.create(any()) } returns noPriceResponse
+
         mockMvc.perform(
             post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"テスト書籍","authorIds":[1]}"""),
+                .content("""{"title":"テスト書籍","published":false,"authorIds":[1]}"""),
         )
-            .andExpect(status().isBadRequest)
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.id").value(1))
     }
 
     // 登録機能：異常系（isPublished が null → 400）
