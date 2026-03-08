@@ -135,18 +135,26 @@
 #### 出力
 
 - `src/test/kotlin/com/example/library_management/service/BookServiceTest.kt`
-  - 正常系：書籍登録・更新が成功すること
-  - 異常系：`price` が負の値の場合に例外がスローされること
-  - 異常系：`authorIds` が空の場合に例外がスローされること
-  - 異常系：`PUBLISHED` から `UNPUBLISHED` への変更で例外がスローされること
-  - 異常系：存在しない ID への更新で例外がスローされること
+  - BookServiceTest テストケース一覧:
+    - 登録機能：正常系（未出版で登録）
+    - 登録機能：正常系（出版済みで登録）
+    - 登録機能：正常系（複数著者で登録）
+    - 更新機能：正常系（タイトル・価格・著者を変更、著者数は2から1に減らす）
 - `src/test/kotlin/com/example/library_management/controller/BookControllerTest.kt`
-  - 正常系：POST `/books` が 201 を返すこと
-  - 正常系：PUT `/books/{id}` が 204 を返すこと
-  - 異常系：各バリデーションエラー時に 400 を返すこと
+  - BookControllerTest テストケース一覧:
+    - 登録機能：正常系（201 が返ること）
+    - 登録機能：異常系（title が空文字 → 400）
+    - 登録機能：異常系（price が null → 400）
+    - 登録機能：異常系（price が負の値 → 400）
+    - 登録機能：異常系（authorIds が null → 400）
+    - 登録機能：異常系（authorIds が空リスト → 400）
+    - 登録機能：異常系（存在しない authorIdと存在するauthorIdが混在 → 404）
+    - 更新機能：正常系（204 が返ること）
+    - 更新機能：正常系（未出版 → 出版済みに変更）
+    - 更新機能：異常系（title が空文字 → 400）
+    - 更新機能：異常系（price が負の値 → 400）
+    - 更新機能：異常系（authorIds が空リスト → 400）
+    - 更新機能：異常系（存在しない書籍 ID → 404）
+    - 更新機能：異常系（存在しない authorIdと存在するauthorIdが混在 → 404）
+    - 更新機能：異常系（出版済みから未出版への変更 → 400）
 
-#### 備考
-
-- `BookServiceTest` は `@ExtendWith(MockKExtension::class)` を使用した純粋なユニットテストとする
-- `BookControllerTest` は `@WebMvcTest(BookController::class)` を使用し MockMvc でHTTPレベルのテストを行う
-- `BookService` のモックには `mockk<BookService>()` を使用する
