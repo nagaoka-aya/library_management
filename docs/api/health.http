@@ -1,0 +1,7 @@
+### GET /health
+GET http://localhost:8080/health
+
+###
+
+### GET /health/db
+GET http://localhost:8080/health/db
