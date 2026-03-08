@@ -178,15 +178,30 @@ class FooController(private val fooService: FooService) {
 
 ### ServiceTest
 
-- `@ExtendWith(MockKExtension::class)` を使用した純粋なユニットテスト
-- Repository は `mockk<XxxRepository>()` でモック化
+- `@SpringBootTest` + `@Transactional` を使用した統合テスト（実際の DB に対して検証する）
+- `@Transactional` によりテスト後はロールバックされるため、テスト間の干渉がない
+- Service と Repository は DI で注入し、モックは使用しない
+- 正常系では戻り値の検証に加え、`Repository.findById` で DB の実データも検証する
 
 ```kotlin
-@ExtendWith(MockKExtension::class)
+@SpringBootTest
+@Transactional
 class FooServiceTest {
-    @MockK lateinit var fooRepository: FooRepository
-    @InjectMockKs lateinit var fooService: FooService
-    ...
+    @Autowired lateinit var fooService: FooService
+    @Autowired lateinit var fooRepository: FooRepository
+
+    @Test
+    fun `create - DBに保存されること`() {
+        val response = fooService.create(...)
+
+        // レスポンス検証
+        assertNotNull(response.id)
+
+        // DB検証
+        val saved = fooRepository.findById(response.id)
+        assertNotNull(saved)
+        assertEquals("期待値", saved!!.field)
+    }
 }
 ```
 
@@ -196,6 +211,9 @@ class FooServiceTest {
 - Service は `@MockkBean` でモック化
 
 ```kotlin
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
+import com.ninjasquad.springmockk.MockkBean
+
 @WebMvcTest(FooController::class)
 class FooControllerTest {
     @Autowired lateinit var mockMvc: MockMvc

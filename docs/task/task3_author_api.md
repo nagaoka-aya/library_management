@@ -129,13 +129,21 @@
 #### 出力
 
 - `src/test/kotlin/com/example/library_management/service/AuthorServiceTest.kt`
-  - 正常系：著者登録・更新が成功すること
-  - 異常系：`birthDate` が未来日の場合に例外がスローされること
-  - 異常系：存在しない ID への更新で例外がスローされること
+  - ケース一覧
+    - 登録機能：正常系（著者が登録されリポジトリの戻り値が返ること）
+    - 更新機能：正常系（著者情報が更新されリポジトリの戻り値が返ること）
+    - 更新機能：存在しない ID で NotFoundException がスローされること
 - `src/test/kotlin/com/example/library_management/controller/AuthorControllerTest.kt`
-  - 正常系：POST `/authors` が 201 を返すこと
-  - 正常系：PUT `/authors/{id}` が 204 を返すこと
-  - 異常系：バリデーションエラー時に 400 を返すこと
+  - ケース一覧
+    - 登録機能：正常系（201 が返ること）
+    - 登録機能：name が null の場合に 400 が返ること
+    - 登録機能：name が空文字の場合に 400 が返ること
+    - 登録機能：birthDate が null の場合に 400 が返ること
+    - 登録機能：birthDate が未来日の場合に 400 が返ること
+    - 更新機能：正常系（204 が返ること）
+    - 更新機能：name が空文字の場合に 400 が返ること
+    - 更新機能：birthDate が未来日の場合に 400 が返ること
+    - 更新機能：存在しない ID の場合に 404 が返ること
 
 #### 備考
 
