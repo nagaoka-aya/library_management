@@ -1,6 +1,7 @@
 @baseUrl = http://localhost:8080
 
 ### POST /authors - 著者登録（正常系）
+# @name createAuthor
 POST {{baseUrl}}/authors
 Content-Type: application/json
 
@@ -63,3 +64,32 @@ Content-Type: application/json
   "name": "存在しない著者",
   "birthDate": "1990-01-01"
 }
+
+###
+
+# -------------------------------------------------------
+# GET /authors/{id}/books - 著者に紐づく書籍一覧取得
+#
+# 事前手順:
+# 1. POST /authors（author.http）で著者を登録し、返却された id を確認する
+# 2. POST /books（book.http）で authorIds に上記の著者 id を指定して書籍を登録する
+# 3. 以下のリクエストを実行する
+# -------------------------------------------------------
+
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "吾輩は猫である",
+  "price": 1500,
+  "isPublished": false,
+  "authorIds": [{{createAuthor.response.body.$.id}}]
+}
+
+### GET /authors/{id}/books - 正常系（著者IDに紐づく書籍一覧取得）
+GET {{baseUrl}}/authors/{{createAuthor.response.body.$.id}}/books
+
+###
+
+### GET /authors/{id}/books - 異常系（存在しない著者ID → 404 Not Found）
+GET {{baseUrl}}/authors/9999/books

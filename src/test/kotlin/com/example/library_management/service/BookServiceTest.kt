@@ -8,6 +8,7 @@ import com.example.library_management.repository.BookRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -85,6 +86,59 @@ class BookServiceTest {
         assertNotNull(saved)
         assertEquals(2, saved!!.authorIds.size)
         assertTrue(saved.authorIds.containsAll(listOf(authorId1, authorId2)))
+    }
+
+    // 著者IDに紐づく書籍一覧取得：正常系（著者IDに紐づく書籍が複数件返ること）
+    @Test
+    fun `findByAuthorId - 著者IDに紐づく書籍が複数件返ること`() {
+        val authorId = createAuthor()
+        val book1 = bookService.create(BookRequest(title = "書籍1", price = 1000, isPublished = false, authorIds = listOf(authorId)))
+        val book2 = bookService.create(BookRequest(title = "書籍2", price = 2000, isPublished = true, authorIds = listOf(authorId)))
+
+        val result = bookService.findByAuthorId(authorId)
+
+        assertNotNull(result)
+        assertEquals(2, result!!.size)
+        // ID昇順で返ること
+        assertEquals(book1.id, result[0].id)
+        assertEquals(book2.id, result[1].id)
+    }
+
+    // 著者IDに紐づく書籍一覧取得：正常系（著者は存在するが書籍が0件の場合に空リストが返ること）
+    @Test
+    fun `findByAuthorId - 著者は存在するが書籍が0件の場合に空リストが返ること`() {
+        val authorId = createAuthor()
+
+        val result = bookService.findByAuthorId(authorId)
+
+        assertNotNull(result)
+        assertEquals(0, result!!.size)
+    }
+
+    // 著者IDに紐づく書籍一覧取得：正常系（複数著者に紐づく書籍で対象著者の書籍のみ返ること）
+    @Test
+    fun `findByAuthorId - 複数著者に紐づく書籍で対象著者の書籍のみ返ること`() {
+        val authorId1 = createAuthor("著者1")
+        val authorId2 = createAuthor("著者2")
+        val book1 = bookService.create(BookRequest(title = "著者1の書籍A", price = 1000, isPublished = false, authorIds = listOf(authorId1)))
+        bookService.create(BookRequest(title = "著者2の書籍", price = 2000, isPublished = false, authorIds = listOf(authorId2)))
+        val book2 = bookService.create(BookRequest(title = "著者1の書籍B", price = 1500, isPublished = false, authorIds = listOf(authorId1)))
+
+        val result = bookService.findByAuthorId(authorId1)
+
+        assertNotNull(result)
+        assertEquals(2, result!!.size)
+        // ID昇順で返ること
+        assertEquals(book1.id, result[0].id)
+        assertEquals(book2.id, result[1].id)
+    }
+
+    // 著者IDに紐づく書籍一覧取得：異常系（存在しない著者IDを指定した場合に null が返ること）
+    @Test
+    fun `findByAuthorId - 存在しない著者IDを指定した場合に null が返ること`() {
+        val result = bookService.findByAuthorId(9999L)
+
+        assertNull(result)
     }
 
     // 更新機能：正常系（タイトル・価格・著者を変更、著者数は2から1に減らす）

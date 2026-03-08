@@ -29,6 +29,11 @@ class BookService(
 
     fun findById(id: Long): BookResponse? = bookRepository.findById(id)?.let { toResponse(it) }
 
+    fun findByAuthorId(authorId: Long): List<BookResponse>? {
+        authorRepository.findById(authorId) ?: return null
+        return bookRepository.findByAuthorId(authorId).map { toResponse(it) }
+    }
+
     fun update(id: Long, request: BookRequest): BookResponse {
         val existing = bookRepository.findById(id)!!
         val newStatus = if (request.isPublished == true) PublicationStatus.PUBLISHED else existing.publicationStatus

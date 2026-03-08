@@ -43,7 +43,6 @@
 
 #### 備考
 
-- 指定した著者IDが存在しない場合は `NotFoundException` をスローする
 - 著者は存在するが書籍が0件の場合は空リストを返す
 
 ---
@@ -65,7 +64,7 @@
 
 - `@PathVariable` で著者IDを受け取る
 - `BookService` を DI して使用する
-- 著者が存在しない場合は `GlobalExceptionHandler` が 404 Not Found を返す（Task 3-4 で定義した `NotFoundException` → 404 のマッピングが適用される）
+- 著者が存在しない場合は `BookService.findByAuthorId` が `null` を返すため、Controller で `NotFoundException` をスローする（`GlobalExceptionHandler` が 404 Not Found にマッピングする）
 
 ---
 
@@ -99,15 +98,19 @@
 #### 出力
 
 - `src/test/kotlin/com/example/library_management/service/BookServiceTest.kt` に以下を追加する
-  - 正常系：著者IDに紐づく書籍一覧が返ること
-  - 正常系：著者は存在するが書籍が0件の場合に空リストが返ること
-  - 異常系：存在しない著者IDを指定した場合に例外がスローされること
+  - 著者IDに紐づく書籍一覧取得：正常系（著者IDに紐づく書籍が複数件返ること）
+  - 著者IDに紐づく書籍一覧取得：正常系（著者は存在するが書籍が0件の場合に空リストが返ること）
+  - 著者IDに紐づく書籍一覧取得：正常系（複数著者に紐づく書籍で、対象著者の書籍のみ返ること）
+  - 著者IDに紐づく書籍一覧取得：異常系（存在しない著者IDを指定した場合に null が返ること）
 - `src/test/kotlin/com/example/library_management/controller/AuthorControllerTest.kt` に以下を追加する
-  - 正常系：GET `/authors/{id}/books` が 200 と書籍一覧を返すこと
-  - 異常系：存在しない著者IDを指定した場合に 404 を返すこと
+  - 著者IDに紐づく書籍一覧取得：正常系（200 と1件の書籍 JSON が返ること）
+  - 著者IDに紐づく書籍一覧取得：正常系（200 と３件の書籍一覧 JSON が返ること）
+  - 著者IDに紐づく書籍一覧取得：正常系（書籍が0件の場合に 200 と空配列が返ること）
+  - 著者IDに紐づく書籍一覧取得：異常系（存在しない著者IDを指定した場合に 404 が返ること）
 
 #### 備考
 
-- `BookServiceTest` は `@ExtendWith(MockKExtension::class)` を使用した純粋なユニットテストとする
+- `BookServiceTest` は `@SpringBootTest` + `@Transactional` を使用した統合テストとする（実際の DB に対して検証し、テスト後はロールバックされる）
+- Service と Repository は DI で注入し、モックは使用しない
 - `AuthorControllerTest` は `@WebMvcTest` を使用し MockMvc でHTTPレベルのテストを行う
-- `BookService` のモックには `mockk<BookService>()` を使用する
+- `BookService` のモックには `@MockkBean` を使用する

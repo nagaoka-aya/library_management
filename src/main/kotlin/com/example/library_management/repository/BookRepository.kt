@@ -71,4 +71,15 @@ class BookRepository(private val dsl: DSLContext) {
             authorIds = authorIds,
         )
     }
+
+    fun findByAuthorId(authorId: Long): List<Book> {
+        val bookIds = dsl.select(BOOK_AUTHOR.BOOK_ID)
+            .from(BOOK_AUTHOR)
+            .where(BOOK_AUTHOR.AUTHOR_ID.eq(authorId))
+            .orderBy(BOOK_AUTHOR.BOOK_ID.asc())
+            .fetch()
+            .map { it.get(BOOK_AUTHOR.BOOK_ID)!! }
+
+        return bookIds.mapNotNull { findById(it) }
+    }
 }

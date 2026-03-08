@@ -2,10 +2,13 @@ package com.example.library_management.controller
 
 import com.example.library_management.controller.dto.AuthorRequest
 import com.example.library_management.controller.dto.AuthorResponse
+import com.example.library_management.controller.dto.BookResponse
 import com.example.library_management.exception.NotFoundException
 import com.example.library_management.service.AuthorService
+import com.example.library_management.service.BookService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -16,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/authors")
-class AuthorController(private val authorService: AuthorService) {
+class AuthorController(
+    private val authorService: AuthorService,
+    private val bookService: BookService,
+) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -30,5 +36,10 @@ class AuthorController(private val authorService: AuthorService) {
     fun update(@PathVariable id: Long, @Valid @RequestBody request: AuthorRequest) {
         authorService.findById(id) ?: throw NotFoundException("Author not found: id=$id")
         authorService.update(id, request)
+    }
+
+    @GetMapping("/{id}/books")
+    fun getBooksByAuthor(@PathVariable id: Long): List<BookResponse> {
+        return bookService.findByAuthorId(id) ?: throw NotFoundException("Author not found: id=$id")
     }
 }
