@@ -1,10 +1,8 @@
 @baseUrl = http://localhost:8080
 
-# 手順: まず docs/api/author.http で著者を登録（POST /authors）してから、
-# 以下の書籍登録・更新リクエストを実行してください。
-
 ## POST /books - 書籍登録（正常系）
-### 事前実施 - 著者登録
+### 手順1: 著者登録（このリクエストを先に実行）
+# @name createAuthor
 POST {{baseUrl}}/authors
 Content-Type: application/json
 
@@ -15,25 +13,39 @@ Content-Type: application/json
 
 ###
 
+### 手順2: 書籍登録（createAuthor のレスポンスから authorId を自動取得）
 POST {{baseUrl}}/books
 Content-Type: application/json
 
 {
   "title": "吾輩は猫である",
   "price": 1500,
-  "authorIds": [9]
+  "isPublished": false,
+  "authorIds": [{{createAuthor.response.body.$.id}}]
 }
 
 ###
 
 ### POST /books - 書籍登録（正常系: 複数著者）
+# @name createAuthor2
+POST {{baseUrl}}/authors
+Content-Type: application/json
+
+{
+  "name": "森鴎外",
+  "birthDate": "1862-01-19"
+}
+
+###
+
 POST {{baseUrl}}/books
 Content-Type: application/json
 
 {
   "title": "共著書籍",
   "price": 2000,
-  "authorIds": [9, 10]
+  "isPublished": false,
+  "authorIds": [{{createAuthor.response.body.$.id}}, {{createAuthor2.response.body.$.id}}]
 }
 
 ###
@@ -45,7 +57,8 @@ Content-Type: application/json
 {
   "title": "",
   "price": 1500,
-  "authorIds": [9]
+  "isPublished": false,
+  "authorIds": [{{createAuthor.response.body.$.id}}]
 }
 
 ###
@@ -57,7 +70,8 @@ Content-Type: application/json
 {
   "title": "吾輩は猫である",
   "price": -1,
-  "authorIds": [1]
+  "isPublished": false,
+  "authorIds": [{{createAuthor.response.body.$.id}}]
 }
 
 ###
@@ -69,6 +83,7 @@ Content-Type: application/json
 {
   "title": "吾輩は猫である",
   "price": 1500,
+  "isPublished": false,
   "authorIds": []
 }
 
@@ -80,7 +95,8 @@ Content-Type: application/json
 
 {
   "title": "吾輩は猫である",
-  "price": 1500
+  "price": 1500,
+  "isPublished": false
 }
 
 ###
