@@ -31,10 +31,6 @@ class BookService(
 
     fun update(id: Long, request: BookRequest): BookResponse {
         val existing = bookRepository.findById(id)!!
-        if (existing.publicationStatus == PublicationStatus.PUBLISHED && request.isPublished == false) {
-            throw IllegalArgumentException("Cannot change publication status from PUBLISHED to UNPUBLISHED")
-        }
-
         val newStatus = if (request.isPublished == true) PublicationStatus.PUBLISHED else existing.publicationStatus
 
         val book = Book(

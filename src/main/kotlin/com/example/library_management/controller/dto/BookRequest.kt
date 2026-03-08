@@ -11,6 +11,7 @@ data class BookRequest(
     @field:NotNull
     @field:Min(0)
     val price: Int?,
+    @field:NotNull
     val isPublished: Boolean?,
     @field:NotNull
     @field:Size(min = 1)

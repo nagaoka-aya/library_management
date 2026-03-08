@@ -49,7 +49,7 @@ class BookControllerTest {
         mockMvc.perform(
             post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"テスト書籍","price":1500,"authorIds":[1]}"""),
+                .content("""{"title":"テスト書籍","price":1500,"isPublished":false,"authorIds":[1]}"""),
         )
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.id").value(1))
@@ -73,6 +73,17 @@ class BookControllerTest {
             post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""{"title":"テスト書籍","authorIds":[1]}"""),
+        )
+            .andExpect(status().isBadRequest)
+    }
+
+    // 登録機能：異常系（isPublished が null → 400）
+    @Test
+    fun `POST books - isPublished が null の場合に 400 が返ること`() {
+        mockMvc.perform(
+            post("/books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"title":"テスト書籍","price":1500,"authorIds":[1]}"""),
         )
             .andExpect(status().isBadRequest)
     }
@@ -119,7 +130,7 @@ class BookControllerTest {
         mockMvc.perform(
             post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"テスト書籍","price":1500,"authorIds":[1,999]}"""),
+                .content("""{"title":"テスト書籍","price":1500,"isPublished":false,"authorIds":[1,999]}"""),
         )
             .andExpect(status().isNotFound)
     }
@@ -177,6 +188,17 @@ class BookControllerTest {
             .andExpect(status().isBadRequest)
     }
 
+    // 更新機能：異常系（isPublished が null → 400）
+    @Test
+    fun `PUT books id - isPublished が null の場合に 400 が返ること`() {
+        mockMvc.perform(
+            put("/books/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"title":"新タイトル","price":2000,"authorIds":[1]}"""),
+        )
+            .andExpect(status().isBadRequest)
+    }
+
     // 更新機能：異常系（authorIds が空リスト → 400）
     @Test
     fun `PUT books id - authorIds が空リストの場合に 400 が返ること`() {
@@ -221,8 +243,6 @@ class BookControllerTest {
     fun `PUT books id - 出版済みから未出版への変更で 400 が返ること`() {
         val publishedBookResponse = bookResponse.copy(isPublished = true)
         every { bookService.findById(1L) } returns publishedBookResponse
-        every { authorService.findById(1L) } returns authorResponse
-        every { bookService.update(any(), any()) } throws IllegalArgumentException("Cannot change publication status from PUBLISHED to UNPUBLISHED")
 
         mockMvc.perform(
             put("/books/1")

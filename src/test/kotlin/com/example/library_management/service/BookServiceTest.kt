@@ -32,7 +32,7 @@ class BookServiceTest {
     @Test
     fun `create - 未出版で書籍が登録されること`() {
         val authorId = createAuthor()
-        val request = BookRequest(title = "吾輩は猫である", price = 1500, isPublished = null, authorIds = listOf(authorId))
+        val request = BookRequest(title = "吾輩は猫である", price = 1500, isPublished = false, authorIds = listOf(authorId))
 
         val response = bookService.create(request)
 
@@ -73,7 +73,7 @@ class BookServiceTest {
     fun `create - 複数著者で書籍が登録されること`() {
         val authorId1 = createAuthor("著者1")
         val authorId2 = createAuthor("著者2")
-        val request = BookRequest(title = "共著書籍", price = 2000, isPublished = null, authorIds = listOf(authorId1, authorId2))
+        val request = BookRequest(title = "共著書籍", price = 2000, isPublished = false, authorIds = listOf(authorId1, authorId2))
 
         val response = bookService.create(request)
 
@@ -94,10 +94,10 @@ class BookServiceTest {
         val authorId2 = createAuthor("著者2")
         val authorId3 = createAuthor("著者3")
         val created = bookService.create(
-            BookRequest(title = "旧タイトル", price = 1000, isPublished = null, authorIds = listOf(authorId1, authorId2)),
+            BookRequest(title = "旧タイトル", price = 1000, isPublished = false, authorIds = listOf(authorId1, authorId2)),
         )
 
-        val updateRequest = BookRequest(title = "新タイトル", price = 2500, isPublished = null, authorIds = listOf(authorId3))
+        val updateRequest = BookRequest(title = "新タイトル", price = 2500, isPublished = false, authorIds = listOf(authorId3))
         val response = bookService.update(created.id, updateRequest)
 
         // レスポンス検証
