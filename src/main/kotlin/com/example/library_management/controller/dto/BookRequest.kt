@@ -12,7 +12,7 @@ data class BookRequest(
     @field:Min(0)
     val price: Int?,
     @field:NotNull
-    val isPublished: Boolean?,
+    val published: Boolean?,
     @field:NotNull
     @field:Size(min = 1)
     val authorIds: List<Long>?,

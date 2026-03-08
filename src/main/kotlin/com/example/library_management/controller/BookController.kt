@@ -35,7 +35,7 @@ class BookController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Long, @Valid @RequestBody request: BookRequest) {
         val existingBook = bookService.findById(id) ?: throw NotFoundException("Book not found: id=$id")
-        if (existingBook.isPublished && request.isPublished == false) {
+        if (existingBook.published && request.published == false) {
             throw IllegalArgumentException("Cannot change publication status from PUBLISHED to UNPUBLISHED")
         }
         request.authorIds!!.forEach { authorId ->

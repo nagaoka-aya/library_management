@@ -82,7 +82,7 @@ Content-Type: application/json
 {
   "title": "吾輩は猫である",
   "price": 1500,
-  "isPublished": false,
+  "published": false,
   "authorIds": [{{createAuthor.response.body.$.id}}]
 }
 

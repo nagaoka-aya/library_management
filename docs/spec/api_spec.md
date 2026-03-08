@@ -187,14 +187,14 @@ PUT /books/{bookId}
 | title | String | 必須 | 空文字不可 |
 | price | Int | 必須 | 0以上 |
 | authorIds | List\<Long\> | 必須 | 1件以上。存在する著者IDであること |
-| isPublished | Boolean | 必須 | `true`（出版済み）または `false`（未出版）。`true` から `false` への変更は不可 |
+| published | Boolean | 必須 | `true`（出版済み）または `false`（未出版）。`true` から `false` への変更は不可 |
 
 ```json
 {
   "title": "新しいタイトル",
   "price": 2000,
   "authorIds": [1],
-  "isPublished": true
+  "published": true
 }
 ```
 
@@ -243,7 +243,7 @@ GET /authors/{authorId}/books
 | id | Long | 書籍ID |
 | title | String | タイトル |
 | price | Int | 価格 |
-| isPublished | Boolean | 出版済みフラグ（`true`: 出版済み、`false`: 未出版） |
+| published | Boolean | 出版済みフラグ（`true`: 出版済み、`false`: 未出版） |
 | authors | List\<Author\> | 著者一覧 |
 
 **Author オブジェクト**
@@ -259,7 +259,7 @@ GET /authors/{authorId}/books
     "id": 1,
     "title": "書籍タイトルA",
     "price": 1500,
-    "isPublished": true,
+    "published": true,
     "authors": [
       { "id": 1, "name": "著者名A" }
     ]
@@ -268,7 +268,7 @@ GET /authors/{authorId}/books
     "id": 2,
     "title": "書籍タイトルB",
     "price": 800,
-    "isPublished": false,
+    "published": false,
     "authors": [
       { "id": 1, "name": "著者名A" },
       { "id": 2, "name": "著者名B" }

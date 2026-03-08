@@ -155,7 +155,7 @@ class AuthorControllerTest {
     @Test
     fun `GET authors id books - 正常系 200 と1件の書籍 JSON が返ること`() {
         every { bookService.findByAuthorId(1L) } returns listOf(
-            BookResponse(id = 1L, title = "吾輩は猫である", price = 1500, isPublished = true, authors = listOf(AuthorSummary(id = 1L, name = "夏目漱石"))),
+            BookResponse(id = 1L, title = "吾輩は猫である", price = 1500, published = true, authors = listOf(AuthorSummary(id = 1L, name = "夏目漱石"))),
         )
 
         mockMvc.perform(get("/authors/1/books"))
@@ -171,9 +171,9 @@ class AuthorControllerTest {
     @Test
     fun `GET authors id books - 正常系 200 と3件の書籍一覧 JSON が返ること`() {
         every { bookService.findByAuthorId(1L) } returns listOf(
-            BookResponse(id = 1L, title = "書籍A", price = 1000, isPublished = true, authors = listOf(AuthorSummary(id = 1L, name = "著者A"))),
-            BookResponse(id = 2L, title = "書籍B", price = 1500, isPublished = false, authors = listOf(AuthorSummary(id = 1L, name = "著者A"))),
-            BookResponse(id = 3L, title = "書籍C", price = 2000, isPublished = true, authors = listOf(AuthorSummary(id = 1L, name = "著者A"))),
+            BookResponse(id = 1L, title = "書籍A", price = 1000, published = true, authors = listOf(AuthorSummary(id = 1L, name = "著者A"))),
+            BookResponse(id = 2L, title = "書籍B", price = 1500, published = false, authors = listOf(AuthorSummary(id = 1L, name = "著者A"))),
+            BookResponse(id = 3L, title = "書籍C", price = 2000, published = true, authors = listOf(AuthorSummary(id = 1L, name = "著者A"))),
         )
 
         mockMvc.perform(get("/authors/1/books"))

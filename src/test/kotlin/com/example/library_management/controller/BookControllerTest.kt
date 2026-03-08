@@ -36,7 +36,7 @@ class BookControllerTest {
         id = 1L,
         title = "テスト書籍",
         price = 1500,
-        isPublished = false,
+        published = false,
         authors = listOf(AuthorSummary(id = 1L, name = "テスト著者")),
     )
 
@@ -49,7 +49,7 @@ class BookControllerTest {
         mockMvc.perform(
             post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"テスト書籍","price":1500,"isPublished":false,"authorIds":[1]}"""),
+                .content("""{"title":"テスト書籍","price":1500,"published":false,"authorIds":[1]}"""),
         )
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.id").value(1))
@@ -79,7 +79,7 @@ class BookControllerTest {
 
     // 登録機能：異常系（isPublished が null → 400）
     @Test
-    fun `POST books - isPublished が null の場合に 400 が返ること`() {
+    fun `POST books - published が null の場合に 400 が返ること`() {
         mockMvc.perform(
             post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -130,7 +130,7 @@ class BookControllerTest {
         mockMvc.perform(
             post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"テスト書籍","price":1500,"isPublished":false,"authorIds":[1,999]}"""),
+                .content("""{"title":"テスト書籍","price":1500,"published":false,"authorIds":[1,999]}"""),
         )
             .andExpect(status().isNotFound)
     }
@@ -145,7 +145,7 @@ class BookControllerTest {
         mockMvc.perform(
             put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"新タイトル","price":2000,"isPublished":false,"authorIds":[1]}"""),
+                .content("""{"title":"新タイトル","price":2000,"published":false,"authorIds":[1]}"""),
         )
             .andExpect(status().isNoContent)
     }
@@ -153,7 +153,7 @@ class BookControllerTest {
     // 更新機能：正常系（未出版 → 出版済みに変更）
     @Test
     fun `PUT books id - 未出版から出版済みへの変更で 204 が返ること`() {
-        val publishedBookResponse = bookResponse.copy(isPublished = true)
+        val publishedBookResponse = bookResponse.copy(published = true)
         every { bookService.findById(1L) } returns bookResponse
         every { authorService.findById(1L) } returns authorResponse
         every { bookService.update(any(), any()) } returns publishedBookResponse
@@ -161,7 +161,7 @@ class BookControllerTest {
         mockMvc.perform(
             put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"テスト書籍","price":1500,"isPublished":true,"authorIds":[1]}"""),
+                .content("""{"title":"テスト書籍","price":1500,"published":true,"authorIds":[1]}"""),
         )
             .andExpect(status().isNoContent)
     }
@@ -172,7 +172,7 @@ class BookControllerTest {
         mockMvc.perform(
             put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"","price":2000,"isPublished":false,"authorIds":[1]}"""),
+                .content("""{"title":"","price":2000,"published":false,"authorIds":[1]}"""),
         )
             .andExpect(status().isBadRequest)
     }
@@ -183,14 +183,14 @@ class BookControllerTest {
         mockMvc.perform(
             put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"新タイトル","price":-1,"isPublished":false,"authorIds":[1]}"""),
+                .content("""{"title":"新タイトル","price":-1,"published":false,"authorIds":[1]}"""),
         )
             .andExpect(status().isBadRequest)
     }
 
     // 更新機能：異常系（isPublished が null → 400）
     @Test
-    fun `PUT books id - isPublished が null の場合に 400 が返ること`() {
+    fun `PUT books id - published が null の場合に 400 が返ること`() {
         mockMvc.perform(
             put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -205,7 +205,7 @@ class BookControllerTest {
         mockMvc.perform(
             put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"新タイトル","price":2000,"isPublished":false,"authorIds":[]}"""),
+                .content("""{"title":"新タイトル","price":2000,"published":false,"authorIds":[]}"""),
         )
             .andExpect(status().isBadRequest)
     }
@@ -218,7 +218,7 @@ class BookControllerTest {
         mockMvc.perform(
             put("/books/9999")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"新タイトル","price":2000,"isPublished":false,"authorIds":[1]}"""),
+                .content("""{"title":"新タイトル","price":2000,"published":false,"authorIds":[1]}"""),
         )
             .andExpect(status().isNotFound)
     }
@@ -233,7 +233,7 @@ class BookControllerTest {
         mockMvc.perform(
             put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"新タイトル","price":2000,"isPublished":false,"authorIds":[1,999]}"""),
+                .content("""{"title":"新タイトル","price":2000,"published":false,"authorIds":[1,999]}"""),
         )
             .andExpect(status().isNotFound)
     }
@@ -241,13 +241,13 @@ class BookControllerTest {
     // 更新機能：異常系（出版済みから未出版への変更 → 400）
     @Test
     fun `PUT books id - 出版済みから未出版への変更で 400 が返ること`() {
-        val publishedBookResponse = bookResponse.copy(isPublished = true)
+        val publishedBookResponse = bookResponse.copy(published = true)
         every { bookService.findById(1L) } returns publishedBookResponse
 
         mockMvc.perform(
             put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"title":"テスト書籍","price":1500,"isPublished":false,"authorIds":[1]}"""),
+                .content("""{"title":"テスト書籍","price":1500,"published":false,"authorIds":[1]}"""),
         )
             .andExpect(status().isBadRequest)
     }

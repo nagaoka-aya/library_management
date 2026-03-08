@@ -20,7 +20,7 @@ class BookService(
             id = null,
             title = request.title!!,
             price = request.price!!,
-            publicationStatus = if (request.isPublished == true) PublicationStatus.PUBLISHED else PublicationStatus.UNPUBLISHED,
+            publicationStatus = if (request.published == true) PublicationStatus.PUBLISHED else PublicationStatus.UNPUBLISHED,
             authorIds = request.authorIds!!,
         )
         val saved = bookRepository.insert(book)
@@ -36,7 +36,7 @@ class BookService(
 
     fun update(id: Long, request: BookRequest): BookResponse {
         val existing = bookRepository.findById(id)!!
-        val newStatus = if (request.isPublished == true) PublicationStatus.PUBLISHED else existing.publicationStatus
+        val newStatus = if (request.published == true) PublicationStatus.PUBLISHED else existing.publicationStatus
 
         val book = Book(
             id = id,
@@ -58,7 +58,7 @@ class BookService(
             id = book.id!!,
             title = book.title,
             price = book.price,
-            isPublished = book.publicationStatus == PublicationStatus.PUBLISHED,
+            published = book.publicationStatus == PublicationStatus.PUBLISHED,
             authors = authors,
         )
     }

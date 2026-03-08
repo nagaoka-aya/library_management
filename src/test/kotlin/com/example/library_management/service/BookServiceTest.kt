@@ -33,7 +33,7 @@ class BookServiceTest {
     @Test
     fun `create - 未出版で書籍が登録されること`() {
         val authorId = createAuthor()
-        val request = BookRequest(title = "吾輩は猫である", price = 1500, isPublished = false, authorIds = listOf(authorId))
+        val request = BookRequest(title = "吾輩は猫である", price = 1500, published = false, authorIds = listOf(authorId))
 
         val response = bookService.create(request)
 
@@ -41,7 +41,7 @@ class BookServiceTest {
         assertNotNull(response.id)
         assertEquals("吾輩は猫である", response.title)
         assertEquals(1500, response.price)
-        assertFalse(response.isPublished)
+        assertFalse(response.published)
         assertEquals(1, response.authors.size)
         assertEquals(authorId, response.authors[0].id)
 
@@ -56,12 +56,12 @@ class BookServiceTest {
     @Test
     fun `create - 出版済みで書籍が登録されること`() {
         val authorId = createAuthor()
-        val request = BookRequest(title = "坊っちゃん", price = 1200, isPublished = true, authorIds = listOf(authorId))
+        val request = BookRequest(title = "坊っちゃん", price = 1200, published = true, authorIds = listOf(authorId))
 
         val response = bookService.create(request)
 
         // レスポンス検証
-        assertTrue(response.isPublished)
+        assertTrue(response.published)
 
         // DB検証
         val saved = bookRepository.findById(response.id)
@@ -74,7 +74,7 @@ class BookServiceTest {
     fun `create - 複数著者で書籍が登録されること`() {
         val authorId1 = createAuthor("著者1")
         val authorId2 = createAuthor("著者2")
-        val request = BookRequest(title = "共著書籍", price = 2000, isPublished = false, authorIds = listOf(authorId1, authorId2))
+        val request = BookRequest(title = "共著書籍", price = 2000, published = false, authorIds = listOf(authorId1, authorId2))
 
         val response = bookService.create(request)
 
@@ -92,8 +92,8 @@ class BookServiceTest {
     @Test
     fun `findByAuthorId - 著者IDに紐づく書籍が複数件返ること`() {
         val authorId = createAuthor()
-        val book1 = bookService.create(BookRequest(title = "書籍1", price = 1000, isPublished = false, authorIds = listOf(authorId)))
-        val book2 = bookService.create(BookRequest(title = "書籍2", price = 2000, isPublished = true, authorIds = listOf(authorId)))
+        val book1 = bookService.create(BookRequest(title = "書籍1", price = 1000, published = false, authorIds = listOf(authorId)))
+        val book2 = bookService.create(BookRequest(title = "書籍2", price = 2000, published = true, authorIds = listOf(authorId)))
 
         val result = bookService.findByAuthorId(authorId)
 
@@ -120,9 +120,9 @@ class BookServiceTest {
     fun `findByAuthorId - 複数著者に紐づく書籍で対象著者の書籍のみ返ること`() {
         val authorId1 = createAuthor("著者1")
         val authorId2 = createAuthor("著者2")
-        val book1 = bookService.create(BookRequest(title = "著者1の書籍A", price = 1000, isPublished = false, authorIds = listOf(authorId1)))
-        bookService.create(BookRequest(title = "著者2の書籍", price = 2000, isPublished = false, authorIds = listOf(authorId2)))
-        val book2 = bookService.create(BookRequest(title = "著者1の書籍B", price = 1500, isPublished = false, authorIds = listOf(authorId1)))
+        val book1 = bookService.create(BookRequest(title = "著者1の書籍A", price = 1000, published = false, authorIds = listOf(authorId1)))
+        bookService.create(BookRequest(title = "著者2の書籍", price = 2000, published = false, authorIds = listOf(authorId2)))
+        val book2 = bookService.create(BookRequest(title = "著者1の書籍B", price = 1500, published = false, authorIds = listOf(authorId1)))
 
         val result = bookService.findByAuthorId(authorId1)
 
@@ -148,10 +148,10 @@ class BookServiceTest {
         val authorId2 = createAuthor("著者2")
         val authorId3 = createAuthor("著者3")
         val created = bookService.create(
-            BookRequest(title = "旧タイトル", price = 1000, isPublished = false, authorIds = listOf(authorId1, authorId2)),
+            BookRequest(title = "旧タイトル", price = 1000, published = false, authorIds = listOf(authorId1, authorId2)),
         )
 
-        val updateRequest = BookRequest(title = "新タイトル", price = 2500, isPublished = false, authorIds = listOf(authorId3))
+        val updateRequest = BookRequest(title = "新タイトル", price = 2500, published = false, authorIds = listOf(authorId3))
         val response = bookService.update(created.id, updateRequest)
 
         // レスポンス検証

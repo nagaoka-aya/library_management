@@ -20,7 +20,7 @@ Content-Type: application/json
 {
   "title": "吾輩は猫である",
   "price": 1500,
-  "isPublished": false,
+  "published": false,
   "authorIds": [{{createAuthor.response.body.$.id}}]
 }
 
@@ -44,7 +44,7 @@ Content-Type: application/json
 {
   "title": "共著書籍",
   "price": 2000,
-  "isPublished": false,
+  "published": false,
   "authorIds": [{{createAuthor.response.body.$.id}}, {{createAuthor2.response.body.$.id}}]
 }
 
@@ -57,7 +57,7 @@ Content-Type: application/json
 {
   "title": "",
   "price": 1500,
-  "isPublished": false,
+  "published": false,
   "authorIds": [{{createAuthor.response.body.$.id}}]
 }
 
@@ -70,7 +70,7 @@ Content-Type: application/json
 {
   "title": "吾輩は猫である",
   "price": -1,
-  "isPublished": false,
+  "published": false,
   "authorIds": [{{createAuthor.response.body.$.id}}]
 }
 
@@ -83,7 +83,7 @@ Content-Type: application/json
 {
   "title": "吾輩は猫である",
   "price": 1500,
-  "isPublished": false,
+  "published": false,
   "authorIds": []
 }
 
@@ -96,7 +96,7 @@ Content-Type: application/json
 {
   "title": "吾輩は猫である",
   "price": 1500,
-  "isPublished": false
+  "published": false
 }
 
 ###
@@ -108,7 +108,7 @@ Content-Type: application/json
 {
   "title": "新しいタイトル",
   "price": 2000,
-  "isPublished": true,
+  "published": true,
   "authorIds": [1]
 }
 
@@ -121,7 +121,7 @@ Content-Type: application/json
 {
   "title": "新しいタイトル",
   "price": 2000,
-  "isPublished": false,
+  "published": false,
   "authorIds": [1]
 }
 
@@ -134,7 +134,7 @@ Content-Type: application/json
 {
   "title": "新しいタイトル",
   "price": 2000,
-  "isPublished": false,
+  "published": false,
   "authorIds": [1]
 }
 

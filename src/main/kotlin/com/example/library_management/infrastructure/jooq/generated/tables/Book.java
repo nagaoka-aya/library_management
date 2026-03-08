@@ -77,9 +77,9 @@ public class Book extends TableImpl<BookRecord> {
     public final TableField<BookRecord, BigDecimal> PRICE = createField(DSL.name("PRICE"), SQLDataType.DECIMAL(10, 2).nullable(false), this, "");
 
     /**
-     * The column <code>PUBLIC.BOOK.IS_PUBLISHED</code>.
+     * The column <code>PUBLIC.BOOK.PUBLISHED</code>.
      */
-    public final TableField<BookRecord, Boolean> IS_PUBLISHED = createField(DSL.name("IS_PUBLISHED"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("FALSE"), SQLDataType.BOOLEAN)), this, "");
+    public final TableField<BookRecord, Boolean> PUBLISHED = createField(DSL.name("PUBLISHED"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("FALSE"), SQLDataType.BOOLEAN)), this, "");
 
     private Book(Name alias, Table<BookRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

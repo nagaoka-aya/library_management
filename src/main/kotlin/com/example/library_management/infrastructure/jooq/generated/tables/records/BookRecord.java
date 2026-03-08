@@ -63,16 +63,16 @@ public class BookRecord extends UpdatableRecordImpl<BookRecord> {
     }
 
     /**
-     * Setter for <code>PUBLIC.BOOK.IS_PUBLISHED</code>.
+     * Setter for <code>PUBLIC.BOOK.PUBLISHED</code>.
      */
-    public void setIsPublished(Boolean value) {
+    public void setPublished(Boolean value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>PUBLIC.BOOK.IS_PUBLISHED</code>.
+     * Getter for <code>PUBLIC.BOOK.PUBLISHED</code>.
      */
-    public Boolean getIsPublished() {
+    public Boolean getPublished() {
         return (Boolean) get(3);
     }
 
@@ -99,13 +99,13 @@ public class BookRecord extends UpdatableRecordImpl<BookRecord> {
     /**
      * Create a detached, initialised BookRecord
      */
-    public BookRecord(Long id, String title, BigDecimal price, Boolean isPublished) {
+    public BookRecord(Long id, String title, BigDecimal price, Boolean published) {
         super(Book.BOOK);
 
         setId(id);
         setTitle(title);
         setPrice(price);
-        setIsPublished(isPublished);
+        setPublished(published);
         resetChangedOnNotNull();
     }
 }

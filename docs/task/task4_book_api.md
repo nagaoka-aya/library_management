@@ -20,14 +20,14 @@
   - `Book` データクラス（id, title, price, publicationStatus, authorIds）
   - `PublicationStatus` enum クラス（`UNPUBLISHED`, `PUBLISHED`）
 - `src/main/kotlin/com/example/library_management/controller/dto/BookRequest.kt`
-  - `BookRequest` データクラス（title, price, isPublished, authorIds）
+  - `BookRequest` データクラス（title, price, published, authorIds）
 - `src/main/kotlin/com/example/library_management/controller/dto/BookResponse.kt`
-  - `BookResponse` データクラス（id, title, price, isPublished, authors）
+  - `BookResponse` データクラス（id, title, price, published, authors）
   - `AuthorSummary` データクラス（id, name）— `BookResponse` 内にネストして定義、または同ファイルに定義
 
 #### 備考
 
-- `PublicationStatus` は `Book.kt` 内または同パッケージに定義する。DTO では `isPublished: Boolean` を使用し、サービス層でドメインモデルへの変換を行う
+- `PublicationStatus` は `Book.kt` 内または同パッケージに定義する。DTO では `published: Boolean` を使用し、サービス層でドメインモデルへの変換を行う
 - バリデーションアノテーション（`@NotBlank`, `@Min(0)`, `@Size(min=1)` など）はリクエストDTOに付与する
 
 ---

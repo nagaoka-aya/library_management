@@ -4,7 +4,7 @@ data class BookResponse(
     val id: Long,
     val title: String,
     val price: Int,
-    val isPublished: Boolean,
+    val published: Boolean,
     val authors: List<AuthorSummary>,
 )
 
