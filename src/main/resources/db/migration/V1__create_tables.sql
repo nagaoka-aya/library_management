@@ -8,18 +8,11 @@ CREATE TABLE author
 
 CREATE TABLE book
 (
-    id    BIGINT       NOT NULL AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL,
-    price INTEGER      NOT NULL CHECK (price >= 0),
+    id           BIGINT       NOT NULL AUTO_INCREMENT,
+    title        VARCHAR(255) NOT NULL,
+    price        INTEGER      NOT NULL CHECK (price >= 0),
+    is_published BOOLEAN      NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id)
-);
-
-CREATE TABLE publication
-(
-    book_id      BIGINT    NOT NULL,
-    published_at TIMESTAMP NOT NULL,
-    PRIMARY KEY (book_id),
-    FOREIGN KEY (book_id) REFERENCES book (id)
 );
 
 CREATE TABLE book_author
