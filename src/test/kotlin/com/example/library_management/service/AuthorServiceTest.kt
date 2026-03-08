@@ -1,12 +1,11 @@
 package com.example.library_management.service
 
 import com.example.library_management.controller.dto.AuthorRequest
-import com.example.library_management.exception.NotFoundException
 import com.example.library_management.repository.AuthorRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
@@ -54,11 +53,10 @@ class AuthorServiceTest {
         assertEquals(LocalDate.of(1867, 2, 9), updated.birthDate)
     }
 
-    // 更新機能：存在しない ID で NotFoundException がスローされること
+    // findById：存在しない ID の場合に null が返ること
     @Test
-    fun `update - 存在しない ID で NotFoundException がスローされること`() {
-        assertThrows<NotFoundException> {
-            authorService.update(9999L, AuthorRequest(name = "存在しない著者", birthDate = LocalDate.of(1990, 1, 1)))
-        }
+    fun `findById - 存在しない ID の場合に null が返ること`() {
+        val result = authorService.findById(9999L)
+        assertNull(result)
     }
 }

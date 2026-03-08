@@ -15,6 +15,8 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         return toResponse(saved)
     }
 
+    fun findById(id: Long): AuthorResponse? = authorRepository.findById(id)?.let { toResponse(it) }
+
     fun update(id: Long, request: AuthorRequest): AuthorResponse {
         val author = Author(id = id, name = request.name!!, birthDate = request.birthDate!!)
         val updated = authorRepository.update(author)

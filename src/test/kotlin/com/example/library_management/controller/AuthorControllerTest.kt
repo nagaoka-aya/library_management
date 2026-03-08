@@ -90,6 +90,11 @@ class AuthorControllerTest {
     // 更新機能：正常系（204 が返ること）
     @Test
     fun `PUT authors id - 正常系 204 が返ること`() {
+        every { authorService.findById(1L) } returns AuthorResponse(
+            id = 1L,
+            name = "夏目漱石",
+            birthDate = LocalDate.of(1867, 2, 9),
+        )
         every { authorService.update(any(), any()) } returns AuthorResponse(
             id = 1L,
             name = "夏目金之助",
@@ -129,7 +134,7 @@ class AuthorControllerTest {
     // 更新機能：存在しない ID の場合に 404 が返ること
     @Test
     fun `PUT authors id - 存在しない ID の場合に 404 が返ること`() {
-        every { authorService.update(any(), any()) } throws NotFoundException("Author not found: id=9999")
+        every { authorService.findById(9999L) } returns null
 
         mockMvc.perform(
             put("/authors/9999")

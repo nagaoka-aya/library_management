@@ -82,7 +82,8 @@ data class FooResponse(
 - `@Repository` アノテーションを付与する
 - `DSLContext` をコンストラクタ DI する
 - jOOQ 生成クラス（`Tables.XXX`）を使ってクエリを記述する
-- 存在しない ID への更新・参照は `NotFoundException` をスローする
+- Repository は DB アクセスのみを担い、存在チェックや例外スローは行わない
+- `findById` は存在しない場合に `null` を返す
 
 ```kotlin
 @Repository
@@ -91,8 +92,7 @@ class FooRepository(private val dsl: DSLContext) {
     fun insert(foo: Foo): Foo { ... }
 
     fun update(foo: Foo): Foo {
-        val updated = dsl.update(FOO)...execute()
-        if (updated == 0) throw NotFoundException("Foo not found: id=${foo.id}")
+        dsl.update(FOO)...execute()
         return foo
     }
 
@@ -107,12 +107,15 @@ class FooRepository(private val dsl: DSLContext) {
 - `@Service` アノテーションを付与する
 - Repository をコンストラクタ DI する
 - ビジネスルール違反（状態遷移違反など）は `IllegalArgumentException` をスローする
-- 存在しないリソースへのアクセスは `NotFoundException` をスローする
+- 存在チェック・`Exception` のスローは **Controller の責務** とし、Service では行わない
 - バリデーションは DTO アノテーションに委譲し、Service で再実装しない（DTO で表現できないビジネスルールのみ実装する）
+- リソースの存在確認用に `findById(id): FooResponse?` メソッドを公開し、Controller から呼び出せるようにする
 
 ```kotlin
 @Service
 class FooService(private val fooRepository: FooRepository) {
+
+    fun findById(id: Long): FooResponse? = fooRepository.findById(id)?.let { toResponse(it) }
 
     fun create(request: FooRequest): FooResponse { ... }
     fun update(id: Long, request: FooRequest): FooResponse { ... }
@@ -135,6 +138,9 @@ class FooService(private val fooRepository: FooRepository) {
 | 更新（PUT） | `@PutMapping("/{id}")` | `@ResponseStatus(HttpStatus.NO_CONTENT)` | なし |
 | 取得（GET） | `@GetMapping` | （デフォルト 200） | リソース本体 |
 
+- 更新系エンドポイントでは **すべての更新処理より前に** 精査処理（項目間精査やDB相関精査も含む）を行い、対応するException`をスローする
+- `Exception` のスローは Controller の責務であり、Service・Repository では行わない
+
 ```kotlin
 @RestController
 @RequestMapping("/foos")
@@ -150,6 +156,7 @@ class FooController(private val fooService: FooService) {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Long, @Valid @RequestBody request: FooRequest) {
+        fooService.findById(id) ?: throw NotFoundException("Foo not found: id=$id")
         fooService.update(id, request)
     }
 }

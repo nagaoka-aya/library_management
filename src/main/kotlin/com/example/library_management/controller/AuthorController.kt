@@ -2,6 +2,7 @@ package com.example.library_management.controller
 
 import com.example.library_management.controller.dto.AuthorRequest
 import com.example.library_management.controller.dto.AuthorResponse
+import com.example.library_management.exception.NotFoundException
 import com.example.library_management.service.AuthorService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -27,6 +28,7 @@ class AuthorController(private val authorService: AuthorService) {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Long, @Valid @RequestBody request: AuthorRequest) {
+        authorService.findById(id) ?: throw NotFoundException("Author not found: id=$id")
         authorService.update(id, request)
     }
 }
