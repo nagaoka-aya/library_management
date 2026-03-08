@@ -19,14 +19,10 @@
 #### 出力
 
 markdownファイルにmermaid形式で出力する
-a5のER図として出力する
+DDLファイルを作成する
 
 - docs/spec/db_structure.md
-- docs/spec/er.a5er
-
-#### 備考
-
-ER図は A5:SQL Mk-2 の「ER図 > SQL DDL からER図を作成」機能を使い、Task 2 で作成する `src/main/resources/db/migration/V1__create_tables.sql` を読み込んで生成する。
+- src/main/resources/db/migration/V1__create_tables.sql
 
 
 ### 2. APIエンドポイント仕様定義
