@@ -134,8 +134,7 @@ Flyway によるDBマイグレーション環境を整備し、jOOQ のコード
 | `vscjava.vscode-java-pack` | Java/Kotlin 開発基盤（デバッガー・テストランナー） |
 | `vscjava.vscode-maven` | Maven ライフサイクル・ゴールのGUI実行 |
 | `detekt.detekt` | detekt 静的解析のエディタ内リアルタイム表示 |
-| `esbenp.prettier-vscode` | YAMLなど設定ファイルのフォーマッター |
-| `redhat.vscode-yaml` | `application.properties` / `openapi.yaml` の補完・検証 |
+| `restia.vscode-kotlin-formatter` | ktlint/ktfmt ベースのフォーマッタ |
 | `humao.rest-client` | `.http` ファイルでAPIを直接呼び出してテスト |
 
 #### 備考
