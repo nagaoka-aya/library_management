@@ -1,0 +1,39 @@
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+  warningsAsErrors: false
+
+complexity:
+  LongMethod:
+    threshold: 60
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 8
+  TooManyFunctions:
+    thresholdInFiles: 20
+    thresholdInClasses: 20
+
+style:
+  MagicNumber:
+    active: false
+  ReturnCount:
+    max: 4
+  WildcardImport:
+    active: false
+  MaxLineLength:
+    maxLineLength: 160
+
+naming:
+  FunctionNaming:
+    # JUnit5 テストメソッドのバッククォート命名を許可
+    functionPattern: '[a-zA-Z][a-zA-Z0-9]*|`[^`]+`'
+  TopLevelPropertyNaming:
+    active: false
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+  TooGenericExceptionThrown:
+    active: false
