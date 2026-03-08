@@ -14,6 +14,7 @@
 - `docs/spec/db_structure.md`（Task 1-1 の成果物）
 - jOOQ 生成コード（Task 2-3 の成果物）
 - `BookRepository`（Task 4-2 の成果物）
+- `docs/spec/implementation_rules.md`（実装ルール）
 
 #### 出力
 
@@ -33,6 +34,7 @@
 
 - `BookRepository`（本タスク 5-1 の成果物）
 - `AuthorRepository`（Task 3-2 の成果物）
+- `docs/spec/implementation_rules.md`（実装ルール）
 
 #### 出力
 
@@ -52,6 +54,7 @@
 
 - `BookService`（本タスク 5-2 の成果物）
 - `docs/spec/api_spec.md`（Task 1-2 の成果物）
+- `docs/spec/implementation_rules.md`（実装ルール）
 
 #### 出力
 
@@ -72,6 +75,7 @@
 
 - `AuthorController`（本タスク 5-3 の成果物）
 - `docs/spec/api_spec.md`（Task 1-2 の成果物）
+- `docs/spec/implementation_rules.md`（実装ルール）
 
 #### 出力
 
@@ -90,6 +94,7 @@
 
 - `BookService`（本タスク 5-2 の成果物）
 - `AuthorController`（本タスク 5-3 の成果物）
+- `docs/spec/implementation_rules.md`（実装ルール）
 
 #### 出力
 

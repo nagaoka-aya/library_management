@@ -12,6 +12,7 @@
 #### 入力
 
 - `docs/spec/api_spec.md`（Task 1-2 の成果物）
+- `docs/spec/implementation_rules.md`（実装ルール）
 
 #### 出力
 
