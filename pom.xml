@@ -54,6 +54,10 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jooq-test</artifactId>
 			<scope>test</scope>
@@ -72,6 +76,76 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- Flyway migration for jOOQ code generation -->
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>flyway-migrate-for-jooq</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>migrate</goal>
+						</goals>
+						<configuration>
+							<driver>org.h2.Driver</driver>
+							<url>jdbc:h2:file:${project.build.directory}/h2-codegen</url>
+							<user>sa</user>
+							<password></password>
+							<locations>
+								<location>filesystem:${project.basedir}/src/main/resources/db/migration</location>
+							</locations>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>${h2.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<!-- jOOQ code generation -->
+			<plugin>
+				<groupId>org.jooq</groupId>
+				<artifactId>jooq-codegen-maven</artifactId>
+				<executions>
+					<execution>
+						<id>jooq-codegen</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<jdbc>
+						<driver>org.h2.Driver</driver>
+						<url>jdbc:h2:file:${project.build.directory}/h2-codegen</url>
+						<user>sa</user>
+						<password></password>
+					</jdbc>
+					<generator>
+						<database>
+							<name>org.jooq.meta.h2.H2Database</name>
+							<includes>.*</includes>
+							<inputSchema>PUBLIC</inputSchema>
+						</database>
+						<target>
+							<packageName>com.example.library_management.infrastructure.jooq.generated</packageName>
+							<directory>src/main/kotlin</directory>
+						</target>
+					</generator>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>${h2.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
