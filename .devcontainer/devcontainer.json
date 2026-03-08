@@ -1,0 +1,14 @@
+{
+	"name": "library_management_system",
+	"image": "mcr.microsoft.com/devcontainers/java:21",
+
+	"features": {
+		"ghcr.io/devcontainers/features/java:1": {
+			"version": "21",
+			"installMaven": true
+		},
+        "ghcr.io/mikaello/devcontainer-features/kotlinc:1": {
+            "version": "1.1.0"
+        }
+	}
+}
