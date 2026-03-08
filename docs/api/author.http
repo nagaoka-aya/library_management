@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:8080
+
+### POST /authors - 著者登録（正常系）
+POST {{baseUrl}}/authors
+Content-Type: application/json
+
+{
+  "name": "夏目漱石",
+  "birthDate": "1867-02-09"
+}
+
+###
+
+### POST /authors - 著者登録（バリデーションエラー: name が空文字）
+POST {{baseUrl}}/authors
+Content-Type: application/json
+
+{
+  "name": "",
+  "birthDate": "1867-02-09"
+}
+
+###
+
+### POST /authors - 著者登録（バリデーションエラー: birthDate が未来日）
+POST {{baseUrl}}/authors
+Content-Type: application/json
+
+{
+  "name": "未来の著者",
+  "birthDate": "2099-01-01"
+}
+
+###
+
+### PUT /authors/{id} - 著者更新（正常系）
+PUT {{baseUrl}}/authors/1
+Content-Type: application/json
+
+{
+  "name": "夏目金之助",
+  "birthDate": "1867-02-09"
+}
+
+###
+
+### PUT /authors/{id} - 著者更新（バリデーションエラー: name が空文字）
+PUT {{baseUrl}}/authors/1
+Content-Type: application/json
+
+{
+  "name": "",
+  "birthDate": "1867-02-09"
+}
+
+###
+
+### PUT /authors/{id} - 著者更新（404: 存在しない ID）
+PUT {{baseUrl}}/authors/9999
+Content-Type: application/json
+
+{
+  "name": "存在しない著者",
+  "birthDate": "1990-01-01"
+}
