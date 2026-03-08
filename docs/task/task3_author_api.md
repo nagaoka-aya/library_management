@@ -66,7 +66,6 @@
 
 #### 備考
 
-- バリデーション：`birthDate` が現在日以前であることをサービス層で検証する
 - バリデーション違反時は `IllegalArgumentException` をスローする
 - `AuthorRepository` を DI して使用する
 
