@@ -19,13 +19,14 @@
   - `Book` データクラス（id, title, price, publicationStatus, authorIds）
   - `PublicationStatus` enum クラス（`UNPUBLISHED`, `PUBLISHED`）
 - `src/main/kotlin/com/example/library_management/controller/dto/BookRequest.kt`
-  - `BookRequest` データクラス（title, price, publicationStatus, authorIds）
+  - `BookRequest` データクラス（title, price, isPublished, authorIds）
 - `src/main/kotlin/com/example/library_management/controller/dto/BookResponse.kt`
-  - `BookResponse` データクラス（id, title, price, publicationStatus, authorIds）
+  - `BookResponse` データクラス（id, title, price, isPublished, authors）
+  - `AuthorSummary` データクラス（id, name）— `BookResponse` 内にネストして定義、または同ファイルに定義
 
 #### 備考
 
-- `PublicationStatus` は `Book.kt` 内または同パッケージに定義する
+- `PublicationStatus` は `Book.kt` 内または同パッケージに定義する。DTO では `isPublished: Boolean` を使用し、サービス層でドメインモデルへの変換を行う
 - バリデーションアノテーション（`@NotBlank`, `@Min(0)`, `@Size(min=1)` など）はリクエストDTOに付与する
 
 ---
@@ -49,7 +50,7 @@
 - `book_authors` の更新は既存レコードを DELETE してから INSERT する洗い替え方式とする
 - jOOQ の生成クラス（`Tables.BOOKS`, `Tables.BOOK_AUTHORS`）を使ってクエリを記述する
 - `DSLContext` を DI して使用する
-- 存在しない ID への更新は `IllegalArgumentException` をスローする
+- 存在しない ID への更新は `NotFoundException` をスローする
 
 ---
 
@@ -72,6 +73,7 @@
 - バリデーション：`authorIds` が1件以上であること
 - バリデーション：`PUBLISHED` から `UNPUBLISHED` への変更は、更新前の状態を `findById` で取得して検証する
 - バリデーション違反時は `IllegalArgumentException` をスローする
+- `authorIds` に存在しない著者IDが含まれる場合は `NotFoundException` をスローする
 - `BookRepository` および `AuthorRepository`（著者存在確認用）を DI して使用する
 
 ---
@@ -134,7 +136,7 @@
   - 異常系：存在しない ID への更新で例外がスローされること
 - `src/test/kotlin/com/example/library_management/controller/BookControllerTest.kt`
   - 正常系：POST `/books` が 201 を返すこと
-  - 正常系：PUT `/books/{id}` が 200 を返すこと
+  - 正常系：PUT `/books/{id}` が 204 を返すこと
   - 異常系：各バリデーションエラー時に 400 を返すこと
 
 #### 備考

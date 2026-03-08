@@ -41,7 +41,7 @@
 
 #### 備考
 
-- 指定した著者IDが存在しない場合は `IllegalArgumentException` をスローする
+- 指定した著者IDが存在しない場合は `NotFoundException` をスローする
 - 著者は存在するが書籍が0件の場合は空リストを返す
 
 ---
@@ -62,7 +62,7 @@
 
 - `@PathVariable` で著者IDを受け取る
 - `BookService` を DI して使用する
-- 著者が存在しない場合は `GlobalExceptionHandler` が 404 Not Found を返す（`IllegalArgumentException` を 404 にマッピングするよう `GlobalExceptionHandler` を更新する）
+- 著者が存在しない場合は `GlobalExceptionHandler` が 404 Not Found を返す（Task 3-4 で定義した `NotFoundException` → 404 のマッピングが適用される）
 
 ---
 

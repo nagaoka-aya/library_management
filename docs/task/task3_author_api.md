@@ -47,7 +47,7 @@
 
 - jOOQ の生成クラス（`Tables.AUTHORS`）を使ってクエリを記述する
 - `DSLContext` を DI して使用する
-- 存在しない ID への更新は `IllegalArgumentException` をスローする
+- 存在しない ID への更新は `NotFoundException` をスローする
 
 ---
 
@@ -86,6 +86,9 @@
   - `PUT /authors/{id}` — 著者更新
 - `src/main/kotlin/com/example/library_management/controller/GlobalExceptionHandler.kt`
   - `IllegalArgumentException` を 400 Bad Request に変換する `@RestControllerAdvice`
+  - `NotFoundException` を 404 Not Found に変換する
+- `src/main/kotlin/com/example/library_management/exception/NotFoundException.kt`
+  - `NotFoundException` カスタム例外クラス
 
 #### 備考
 
@@ -131,7 +134,7 @@
   - 異常系：存在しない ID への更新で例外がスローされること
 - `src/test/kotlin/com/example/library_management/controller/AuthorControllerTest.kt`
   - 正常系：POST `/authors` が 201 を返すこと
-  - 正常系：PUT `/authors/{id}` が 200 を返すこと
+  - 正常系：PUT `/authors/{id}` が 204 を返すこと
   - 異常系：バリデーションエラー時に 400 を返すこと
 
 #### 備考
