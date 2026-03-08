@@ -1,0 +1,125 @@
+@baseUrl = http://localhost:8080
+
+# 手順: まず docs/api/author.http で著者を登録（POST /authors）してから、
+# 以下の書籍登録・更新リクエストを実行してください。
+
+## POST /books - 書籍登録（正常系）
+### 事前実施 - 著者登録
+POST {{baseUrl}}/authors
+Content-Type: application/json
+
+{
+  "name": "夏目漱石",
+  "birthDate": "1867-02-09"
+}
+
+###
+
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "吾輩は猫である",
+  "price": 1500,
+  "authorIds": [9]
+}
+
+###
+
+### POST /books - 書籍登録（正常系: 複数著者）
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "共著書籍",
+  "price": 2000,
+  "authorIds": [9, 10]
+}
+
+###
+
+### POST /books - 書籍登録（バリデーションエラー: title が空文字）
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "",
+  "price": 1500,
+  "authorIds": [9]
+}
+
+###
+
+### POST /books - 書籍登録（バリデーションエラー: price が負の値）
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "吾輩は猫である",
+  "price": -1,
+  "authorIds": [1]
+}
+
+###
+
+### POST /books - 書籍登録（バリデーションエラー: authorIds が空）
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "吾輩は猫である",
+  "price": 1500,
+  "authorIds": []
+}
+
+###
+
+### POST /books - 書籍登録（バリデーションエラー: authorIds が null）
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "吾輩は猫である",
+  "price": 1500
+}
+
+###
+
+### PUT /books/{id} - 書籍更新（正常系）
+PUT {{baseUrl}}/books/1
+Content-Type: application/json
+
+{
+  "title": "新しいタイトル",
+  "price": 2000,
+  "isPublished": true,
+  "authorIds": [1]
+}
+
+###
+
+### PUT /books/{id} - 書籍更新（エラー: 出版済みから未出版への変更は不可）
+PUT {{baseUrl}}/books/1
+Content-Type: application/json
+
+{
+  "title": "新しいタイトル",
+  "price": 2000,
+  "isPublished": false,
+  "authorIds": [1]
+}
+
+###
+
+### PUT /books/{id} - 書籍更新（エラー: 存在しない書籍ID）
+PUT {{baseUrl}}/books/9999
+Content-Type: application/json
+
+{
+  "title": "新しいタイトル",
+  "price": 2000,
+  "isPublished": false,
+  "authorIds": [1]
+}
+
+###
